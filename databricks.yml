@@ -1,4 +1,4 @@
-# This is a Databricks asset bundle definition for sdp_bundle_b.
+# This is a Databricks asset bundle definition for sdp_v3_pipeline.
 bundle:
   name: sdp_v3_pipeline
   uuid: aae208b3-90ab-4d51-8047-afc0d0143717
@@ -18,6 +18,9 @@ targets:
       schema: ${workspace.current_user.short_name}
   prod:
     mode: production
+    # --- INDENT ROOT_PATH INSIDE WORKSPACE SECTION ---
+    workspace:
+      root_path: /Workspace/Users/thakkalipk007@gmail.com/.bundle/${bundle.name}/${bundle.target}
     variables:
       catalog: sdp_cata
       schema: prod
@@ -35,7 +38,6 @@ resources:
       notification_settings:
         no_alert_for_skipped_runs: true
       
-      # --- SWAPPED OUT TRIPPED BLOCK FOR THE VALID SCHEDULE FORMAT ---
       schedule:
         quartz_cron_expression: "0 */5 * * * ?"
         timezone_id: "UTC"
@@ -51,7 +53,7 @@ resources:
           min_retry_interval_millis: 100000
         - task_key: test-pipeline-task
           pipeline_task:
-            pipeline_id: 3ae3d844-65da-498d-aa60-a5600c6227e5
+            pipeline_id: e3d84465-13da-498d-aa60-a5600c6227e5
             full_refresh: true
           max_retries: 1
           min_retry_interval_millis: 100000
