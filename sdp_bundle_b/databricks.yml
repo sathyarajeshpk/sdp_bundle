@@ -1,0 +1,57 @@
+# This is a Databricks asset bundle definition for sdp_bundle_b.
+bundle:
+  name: sdp_v3_pipeline
+  uuid: aae208b3-90ab-4d51-8047-afc0d0143717
+
+variables:
+  catalog:
+    description: The catalog to use
+  schema:
+    description: The schema to use
+
+targets:
+  dev:
+    mode: development
+    default: true
+    variables:
+      catalog: sdp_cata
+      schema: ${workspace.current_user.short_name}
+  prod:
+    mode: production
+    variables:
+      catalog: sdp_cata
+      schema: prod
+    permissions:
+      - user_name: thakkalipk007@gmail.com
+        level: CAN_MANAGE
+
+resources:
+  jobs:
+    first_sdp_pipeline_job:
+      name: first_sdp_pipeline
+      email_notifications:
+        on_failure:
+          - thakkalipk007@gmail.com
+      notification_settings:
+        no_alert_for_skipped_runs: true
+      
+      # --- SWAPPED OUT TRIPPED BLOCK FOR THE VALID SCHEDULE FORMAT ---
+      schedule:
+        quartz_cron_expression: "0 */5 * * * ?"
+        timezone_id: "UTC"
+        pause_status: UNPAUSED
+        
+      max_concurrent_runs: 2
+      tasks:
+        - task_key: pipeline-task-d5798326-14f7-459b-a3c3-68f6966e006e
+          pipeline_task:
+            pipeline_id: d5798326-14f7-459b-a3c3-68f6966e006e
+            full_refresh: true
+          max_retries: 1
+          min_retry_interval_millis: 100000
+        - task_key: test-pipeline-task
+          pipeline_task:
+            pipeline_id: 3ae3d844-65da-498d-aa60-a5600c6227e5
+            full_refresh: true
+          max_retries: 1
+          min_retry_interval_millis: 100000
