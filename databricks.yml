@@ -18,23 +18,42 @@ targets:
       schema: ${workspace.current_user.short_name}
   prod:
     mode: production
-    # --- INDENT ROOT_PATH INSIDE WORKSPACE SECTION ---
     workspace:
-      root_path: /Workspace/Users/thakkalipk007@gmail.com/.bundle/${bundle.name}/${bundle.target}
+      # --- UPDATED TO YOUR NEW WORKSPACE EMAIL ---
+      root_path: /Workspace/Users/sathyarajeshpk@gmail.com/.bundle/${bundle.name}/${bundle.target}
     variables:
       catalog: sdp_cata
       schema: prod
     permissions:
-      - user_name: thakkalipk007@gmail.com
+      - user_name: sathyarajeshpk@gmail.com
         level: CAN_MANAGE
 
 resources:
+  # --- BOTH PIPELINES ARE DECLARED DYNAMICALLY USING YOUR NEW WORKSPACE PATHS ---
+  pipelines:
+    main_dlt_pipeline:
+      name: first_sdp_pipeline_dlt
+      catalog: ${bundle.variables.catalog}
+      target: ${bundle.variables.schema}
+      libraries:
+        - notebook:
+            path: /Workspace/Users/sathyarajeshpk@://gmail.com
+
+    test_dlt_pipeline:
+      name: test_pipeline_dlt
+      catalog: ${bundle.variables.catalog}
+      target: ${bundle.variables.schema}
+      libraries:
+        - notebook:
+            path: /Workspace/Users/sathyarajeshpk@://gmail.com Exploration 2026-06-27 21:44:36.py
+
+  # --- BOTH TASKS LINKED CONCURRENTLY INSIDE A SINGLE SCHEDULER JOB ---
   jobs:
     first_sdp_pipeline_job:
       name: first_sdp_pipeline
       email_notifications:
         on_failure:
-          - thakkalipk007@gmail.com
+          - sathyarajeshpk@gmail.com
       notification_settings:
         no_alert_for_skipped_runs: true
       
@@ -45,15 +64,15 @@ resources:
         
       max_concurrent_runs: 2
       tasks:
-        - task_key: pipeline-task-d5798326-14f7-459b-a3c3-68f6966e006e
+        - task_key: pipeline-task-main
           pipeline_task:
-            pipeline_id: d5798326-14f7-459b-a3c3-68f6966e006e
+            pipeline_key: main_dlt_pipeline
             full_refresh: true
           max_retries: 1
           min_retry_interval_millis: 100000
         - task_key: test-pipeline-task
           pipeline_task:
-            pipeline_id: e3d84465-13da-498d-aa60-a5600c6227e5
+            pipeline_key: test_dlt_pipeline
             full_refresh: true
           max_retries: 1
           min_retry_interval_millis: 100000

@@ -1,0 +1,6 @@
+.databricks/
+.terraform/
+.bundle/
+bundle.tf.json
+*.tfstate
+*.tfstate.backup
