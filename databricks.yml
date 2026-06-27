@@ -1,4 +1,4 @@
-#asset bundle definition for sdp_v3_pipeline.
+# This is a Databricks asset bundle definition for sdp_v3_pipeline.
 bundle:
   name: sdp_v3_pipeline
   uuid: aae208b3-90ab-4d51-8047-afc0d0143717
@@ -14,15 +14,14 @@ targets:
     mode: development
     default: true
     variables:
-      catalog: sdp_cata
+      catalog: main
       schema: ${workspace.current_user.short_name}
   prod:
     mode: production
     workspace:
-      # --- FIX 1: FIXED EMAIL SYNTAX FOR PROD STORAGE ---
       root_path: /Workspace/Users/sathyarajeshpk@://gmail.com{bundle.name}/${bundle.target}
     variables:
-      catalog: sdp_cata
+      catalog: main
       schema: prod
     permissions:
       - user_name: sathyarajeshpk@gmail.com
@@ -38,7 +37,6 @@ resources:
       serverless: true
       libraries:
         - notebook:
-            # --- FIX 2: FIXED FULL PATH TO YOUR UI REPO WORKSPACE FILE ---
             path: /Workspace/Users/sathyarajeshpk@://gmail.com
 
     test_dlt_pipeline:
@@ -49,7 +47,6 @@ resources:
       serverless: true
       libraries:
         - notebook:
-            # --- FIX 3: FIXED FULL PATH TO YOUR SECOND DISK EXPLORATION notebook ---
             path: /Workspace/Users/sathyarajeshpk@://gmail.com Exploration 2026-06-27 21:44:36.py
 
   jobs:
