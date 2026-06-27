@@ -1,4 +1,4 @@
-# This is a Databricks asset bundle definition for sdp_v3_pipeline.
+#asset bundle definition for sdp_v3_pipeline.
 bundle:
   name: sdp_v3_pipeline
   uuid: aae208b3-90ab-4d51-8047-afc0d0143717
@@ -19,8 +19,8 @@ targets:
   prod:
     mode: production
     workspace:
-      # --- UPDATED TO YOUR NEW WORKSPACE EMAIL ---
-      root_path: /Workspace/Users/sathyarajeshpk@gmail.com/.bundle/${bundle.name}/${bundle.target}
+      # --- FIX 1: FIXED EMAIL SYNTAX FOR PROD STORAGE ---
+      root_path: /Workspace/Users/sathyarajeshpk@://gmail.com{bundle.name}/${bundle.target}
     variables:
       catalog: sdp_cata
       schema: prod
@@ -29,25 +29,29 @@ targets:
         level: CAN_MANAGE
 
 resources:
-  # --- BOTH PIPELINES ARE DECLARED DYNAMICALLY USING YOUR NEW WORKSPACE PATHS ---
   pipelines:
     main_dlt_pipeline:
       name: first_sdp_pipeline_dlt
-      catalog: ${bundle.variables.catalog}
-      target: ${bundle.variables.schema}
+      catalog: ${var.catalog}
+      target: ${var.schema}
+      channel: preview
+      serverless: true
       libraries:
         - notebook:
+            # --- FIX 2: FIXED FULL PATH TO YOUR UI REPO WORKSPACE FILE ---
             path: /Workspace/Users/sathyarajeshpk@://gmail.com
 
     test_dlt_pipeline:
       name: test_pipeline_dlt
-      catalog: ${bundle.variables.catalog}
-      target: ${bundle.variables.schema}
+      catalog: ${var.catalog}
+      target: ${var.schema}
+      channel: preview
+      serverless: true
       libraries:
         - notebook:
+            # --- FIX 3: FIXED FULL PATH TO YOUR SECOND DISK EXPLORATION notebook ---
             path: /Workspace/Users/sathyarajeshpk@://gmail.com Exploration 2026-06-27 21:44:36.py
 
-  # --- BOTH TASKS LINKED CONCURRENTLY INSIDE A SINGLE SCHEDULER JOB ---
   jobs:
     first_sdp_pipeline_job:
       name: first_sdp_pipeline
@@ -58,7 +62,7 @@ resources:
         no_alert_for_skipped_runs: true
       
       schedule:
-        quartz_cron_expression: "0 */5 * * * ?"
+        quartz_cron_expression: "0 */50 * * * ?"
         timezone_id: "UTC"
         pause_status: UNPAUSED
         
@@ -66,13 +70,13 @@ resources:
       tasks:
         - task_key: pipeline-task-main
           pipeline_task:
-            pipeline_key: main_dlt_pipeline
+            pipeline_id: ${resources.pipelines.main_dlt_pipeline.id}
             full_refresh: true
           max_retries: 1
           min_retry_interval_millis: 100000
         - task_key: test-pipeline-task
           pipeline_task:
-            pipeline_key: test_dlt_pipeline
+            pipeline_id: ${resources.pipelines.test_dlt_pipeline.id}
             full_refresh: true
           max_retries: 1
           min_retry_interval_millis: 100000
