@@ -14,14 +14,14 @@ targets:
     mode: development
     default: true
     variables:
-      catalog: main
-      schema: ${workspace.current_user.short_name}
+      catalog: ${workspace.current_user.short_name}
+      schema: default
   prod:
     mode: production
     workspace:
       root_path: /Workspace/Users/sathyarajeshpk@://gmail.com{bundle.name}/${bundle.target}
     variables:
-      catalog: main
+      catalog: ${workspace.current_user.short_name}
       schema: prod
     permissions:
       - user_name: sathyarajeshpk@gmail.com
