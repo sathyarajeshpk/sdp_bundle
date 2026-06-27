@@ -39,16 +39,6 @@ resources:
         - notebook:
             path: /Workspace/Users/sathyarajeshpk@://gmail.com
 
-    test_dlt_pipeline:
-      name: test_pipeline_dlt
-      catalog: ${var.catalog}
-      target: ${var.schema}
-      channel: preview
-      serverless: true
-      libraries:
-        - notebook:
-            path: /Workspace/Users/sathyarajeshpk@://gmail.com Exploration 2026-06-27 21:44:36.py
-
   jobs:
     first_sdp_pipeline_job:
       name: first_sdp_pipeline
@@ -59,7 +49,7 @@ resources:
         no_alert_for_skipped_runs: true
       
       schedule:
-        quartz_cron_expression: "0 */50 * * * ?"
+        quartz_cron_expression: "0 0 0 * * ?"
         timezone_id: "UTC"
         pause_status: UNPAUSED
         
@@ -68,12 +58,6 @@ resources:
         - task_key: pipeline-task-main
           pipeline_task:
             pipeline_id: ${resources.pipelines.main_dlt_pipeline.id}
-            full_refresh: true
-          max_retries: 1
-          min_retry_interval_millis: 100000
-        - task_key: test-pipeline-task
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.test_dlt_pipeline.id}
             full_refresh: true
           max_retries: 1
           min_retry_interval_millis: 100000
